@@ -1,5 +1,7 @@
 package br.edu.ifpr.todolistif;
 
+import java.time.LocalDateTime;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,11 +14,11 @@ public class TodolistifApplication {
 
 	private final TodoRepository todoRepository;
 
-	TodolistifApplication(TodoRepository todoRepository) {
-		this.todoRepository = todoRepository;
-	}
+    TodolistifApplication(TodoRepository todoRepository) {
+        this.todoRepository = todoRepository;
+    }
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 		SpringApplication.run(TodolistifApplication.class, args);
 	}
 
@@ -24,7 +26,9 @@ public class TodolistifApplication {
 		return args -> {
 			Todo todo = new Todo();
 			todo.setTitle("tarefa teste");
+			todo.setDeadLine(LocalDateTime.now().plusDays(1));
 			todoRepository.save(todo);
+			
 
 			System.out.println("Aplicação iniciada com sucesso!");
 		};

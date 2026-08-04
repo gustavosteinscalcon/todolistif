@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Inserir Tarefa</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <form method="post" action="/create">
+        <label>Tarefa</label><input type="text" name="title" /><br>
+        <label>Prazo</label><input type="datetime-local" name="deadLine" />
+        <button type="submit">Salvar</button>
+    </form>
+
+    <form method="post" action="/select">
+        <label>Editar Tarefa</label>
+        <select name="id">
+            <option th:each="todo : ${todos}" th:value="${todo.id}" th:text="${todo.title}"></option>
+        </select>
+        <button type="submit">Editar</button>
+    </form>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Criada em</th>
+                <th>Prazo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="todo : ${todos}">
+                <td th:text="${todo.title}"></td>
+                <td th:text="${todo.createdAt}"></td>
+                <td th:text="${todo.deadLine}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>
