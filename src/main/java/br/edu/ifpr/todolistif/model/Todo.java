@@ -2,27 +2,31 @@ package br.edu.ifpr.todolistif.model;
 
 import java.time.LocalDateTime;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Column;
 
 @Entity
 public class Todo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // pk do banco
+    private Long id;
 
     @Column(nullable = false)
-    private String title; // tarefa
+    private String title;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt;// data de criação
-    @Column(nullable = false)
-    private LocalDateTime deadLine;// prazo para concluir a tarefa
+    private LocalDateTime createdAt;
 
-    private LocalDateTime finishedAt;// data de conclusão da tarefa
+    @Column(nullable = false)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime deadLine;
+
+    private LocalDateTime finishedAt;
 
     public Todo() {
         this.createdAt = LocalDateTime.now();
@@ -71,5 +75,4 @@ public class Todo {
     public void setFinishedAt(LocalDateTime finishedAt) {
         this.finishedAt = finishedAt;
     }
-
 }

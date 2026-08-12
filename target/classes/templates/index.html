@@ -4,39 +4,55 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Inserir Tarefa</title>
-    <meta name="description" content="">
+    <title>Lista de Tarefas</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
+    <h2>Cadastrar Tarefa</h2>
     <form method="post" action="/create">
-        <label>Tarefa</label><input type="text" name="title" /><br>
-        <label>Prazo</label><input type="datetime-local" name="deadLine" />
+        <label>Tarefa:</label>
+        <input type="text" name="title" required /><br><br>
+        
+        <label>Prazo:</label>
+        <input type="datetime-local" name="deadLine" required /><br><br>
+        
         <button type="submit">Salvar</button>
     </form>
 
+    <hr>
+
+    <h2>Editar por Seleção</h2>
     <form method="post" action="/select">
-        <label>Editar Tarefa</label>
+        <label>Selecione a Tarefa:</label>
         <select name="id">
             <option th:each="todo : ${todos}" th:value="${todo.id}" th:text="${todo.title}"></option>
         </select>
         <button type="submit">Editar</button>
     </form>
-    <br>
-    <table>
+
+    <hr>
+
+    <h2>Lista de Tarefas</h2>
+    <table border="1">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Título</th>
                 <th>Criada em</th>
                 <th>Prazo</th>
+                <th>Ações</th>
             </tr>
         </thead>
         <tbody>
             <tr th:each="todo : ${todos}">
+                <td th:text="${todo.id}"></td>
                 <td th:text="${todo.title}"></td>
-                <td th:text="${todo.createdAt}"></td>
-                <td th:text="${todo.deadLine}"></td>
+                <td th:text="${#temporals.format(todo.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
+                <td th:text="${#temporals.format(todo.deadLine, 'dd/MM/yyyy HH:mm')}"></td>
+                <td>
+                    <a th:href="@{/edit/{id}(id=${todo.id})}">Editar</a>
+                </td>
             </tr>
         </tbody>
     </table>
