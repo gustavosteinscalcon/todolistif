@@ -13,12 +13,12 @@
     <form method="post" action="/create">
         <label>Tarefa:</label>
         <input type="text" name="title" required /><br><br>
-        
+
         <label>Prazo:</label>
         <input type="datetime-local" name="deadLine" required /><br><br>
-        
+
         <button type="submit">Salvar</button>
-    </form>
+    </form> 
 
     <hr>
 
@@ -52,6 +52,9 @@
                 <td th:text="${#temporals.format(todo.deadLine, 'dd/MM/yyyy HH:mm')}"></td>
                 <td>
                     <a th:href="@{/edit/{id}(id=${todo.id})}">Editar</a>
+                    <a th:href="@{/delete/{id}(id=${todo.id})}"
+                        onclick="return confirm('Tem certeza que deseja remover esta tarefa?');">Excluir</a>
+                </td>
                 </td>
             </tr>
         </tbody>

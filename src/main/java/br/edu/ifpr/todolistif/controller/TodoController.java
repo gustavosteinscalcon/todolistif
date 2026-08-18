@@ -13,6 +13,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import br.edu.ifpr.todolistif.model.Todo;
 import br.edu.ifpr.todolistif.repository.TodoRepository;
+import br.edu.ifpr.todolistif.excecao.EdicaoException;
+import br.edu.ifpr.todolistif.excecao.RemocaoException;
 
 @Controller
 public class TodoController {
@@ -33,8 +35,7 @@ public class TodoController {
     @GetMapping("/")
     public ModelAndView list() {
         return new ModelAndView(
-            "index", Map.of("todos", todoRepository.findAll())
-        );
+                "index", Map.of("todos", todoRepository.findAll()));
     }
 
     // Endpoint JSON para testes
@@ -57,6 +58,9 @@ public class TodoController {
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable Long id, Model model) {
         Todo todo = todoRepository.findById(id).orElse(null);
+        if (!todoRepository.existsById(id)) {
+            throw new EdicaoException(id);
+        }
         if (todo != null) {
             model.addAttribute("todo", todo);
             return "edit";
@@ -67,12 +71,22 @@ public class TodoController {
     // Salvar as alterações da tarefa editada
     @PostMapping("/edit/{id}")
     public String update(@PathVariable Long id, Todo todoAtualizada) {
-        Todo todo = todoRepository.findById(id).orElse(null);
-        if (todo != null) {
-            todo.setTitle(todoAtualizada.getTitle());
-            todo.setDeadLine(todoAtualizada.getDeadLine());
-            todoRepository.save(todo);
-        }
+        Todo todo = todoRepository.findById(id)
+            .orElseThrow(() -> new EdicaoException(id));
+            
+        todo.setTitle(todoAtualizada.getTitle());
+        todo.setDeadLine(todoAtualizada.getDeadLine());
+        todoRepository.save(todo);
+        return "redirect:/";
+    }
+
+    // Remover uma tarefa pelo ID
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Long id) {
+        Todo todo = todoRepository.findById(id)
+            .orElseThrow(() -> new RemocaoException(id));
+            
+        todoRepository.delete(todo);
         return "redirect:/";
     }
 }
